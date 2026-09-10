@@ -47,11 +47,12 @@ export const requireRole = (...roles) => async (req, res, next) => {
   }
 };
 
+const _normalized = (s) => String(s || "").replace(/\/$/, "");
 const isProductionSecureCookie = () =>
   process.env.NODE_ENV === "production" ||
-  (process.env.BACKEND_URL || "").startsWith("https://") ||
-  (process.env.FRONTEND_URL || "").startsWith("https://") ||
-  (process.env.GOOGLE_CALLBACK_URL || "").startsWith("https://");
+  (_normalized(process.env.BACKEND_URL) || "").startsWith("https://") ||
+  (_normalized(process.env.FRONTEND_URL) || "").startsWith("https://") ||
+  (_normalized(process.env.GOOGLE_CALLBACK_URL) || "").startsWith("https://");
 
 const buildCookieString = (cookieValue, maxAge) => {
   const secure = isProductionSecureCookie();
